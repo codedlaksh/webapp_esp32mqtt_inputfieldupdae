@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My First Web Page</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <a class="navbar-brand" href="index.html">
+                <img src=".\logo\logo-transparent-svg.svg" class="img-circle" alt="Cinque Terre" width="304"
+                    height="220">
+            </a>
+
+            <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0" type="button"
+                    data-toggle="collapse" data-target="#navbar12">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar12">
+                    <ul class="nav navbar-nav ml-auto ">
+                        <li class="nav-item menu-item"> <a class="nav-link" href="index.html">Home</a> </li>
+                        <li class="nav-item menu-item"> <a class="nav-link" href="jog_window.html">Jog Window</a> </li>
+                        <li class="nav-item menu-item"><a class="nav-link" href="range_of_motion.html">Range of Motion
+                                Session</a></li>
+                        <li class="nav-item menu-item"><a class="nav-link" href="strength_test.html">Strength Test </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+        </nav>
+
+    </header>
+
+    <main>
+        <div class="py-5 text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="mx-auto col-lg-5 col-md-7 col-10">
+
+
+                        <h1>User Profile</h1>
+                        <form class="text-center">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="name" class="form-control" id="form16" placeholder="Full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="age">Age:</label>
+                                <input type="number" class="form-control" id="age" name="age" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="gender">Gender:</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="height">Height:</label>
+                                <input type="number" id="height" name="height" required>
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="weight">Weight:</label>
+                                <input type="number" id="weight" name="weight" required>
+                            </div>
+
+                    
+                    <label for="surgery-date">Date of Surgery:</label>
+                    <input type="date" id="surgery-date" name="surgery-date" required>
+                
+                <div class="form-group">
+                    </small> </div> <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            </form>
+        </div>
+        </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <!-- Add your footer content here -->
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

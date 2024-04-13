@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prescribe</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <a class="navbar-brand" href="index.html">
+                <img src=".\logo\logo-transparent-svg.svg" class="img-circle" alt="Cinque Terre" width="304"
+                    height="220">
+            </a>
+
+            <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0" type="button"
+                    data-toggle="collapse" data-target="#navbar12">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar12">
+                    <ul class="nav navbar-nav ml-auto ">
+                        <li class="nav-item menu-item"> <a class="nav-link" href="index.html">Home</a> </li>
+                    <li class="nav-item menu-item"> <a class="nav-link" href="patient_records.html">Patient Records</a> </li>
+                    <!-- <li class="nav-item menu-item"><a class="nav-link" href="doctor_page.html"> Prescribe</a></li> -->
+
+                    </ul>
+
+                </div>
+        </nav>
+
+    </header>
+
+    <main>
+        <div class="py-5 text-center">
+            <div class="container">
+                <!-- <div class="row">
+                    <div class="mx-auto col-lg-5 col-md-7 col-10"> -->
+                        <div class="row">
+                            <label for="name">Patient Name:</label>
+                            <input type="name" class="form-control" id="input20" placeholder="Aden">
+                        </div>
+               <div class="row">
+                <label for="name">Prescribe Start Pos:</label>
+                <input type="name" class="form-control" id="input21" placeholder="5°">
+               </div>
+                <div class="row">
+                    <label for="name">Prescribe Stop Pos:</label>
+                    <input type="name" class="form-control" id="input22" placeholder="25°">
+                </div>
+               <div class="row">
+                <label for="name">Prescribe Count:</label>
+                <input type="name" class="form-control" id="input23" placeholder="15">
+               </div>
+                <!-- <div class="row">
+                    <label for="name">Prescribe Extra Up Pos</label>
+                    <input type="name" class="form-control" id="form16" placeholder="0°">
+                </div>
+                <div class="row">
+                    <label for="name">Prescribe Extra Down Pos</label>
+                    <input type="name" class="form-control" id="form16" placeholder="2°">
+                </div> -->
+               
+                
+               
+
+                    
+                   
+            
+        </div>
+        <button ID="uploadButton" style="background: rgb(197, 228, 228); border-color: transparent;margin-top: 1rem; border-radius: 10px; font-weight: bolder; ">Upload<img src="cloud-computing.png" style="width: 10%; background: transparent;"></button>
+        </div>
+       
+
+    </main>
+    
+    <script type="text/javascript">
+        // MQTT Client setup
+        var client = new Paho.MQTT.Client(
+            "f72b8337ec8b4c9ea2a1da1effbced2f.s1.eu.hivemq.cloud",
+            Number(8884),
+            "/mqtt",
+            "Physiobot_webclient"
+        );
+    
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+    
+        // Event listener for the upload button
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            client.connect({
+                onSuccess: onConnect,
+                useSSL: true,
+                userName: "info.lakshmigopi@gmail.com",
+                password: "Laksh@2024",
+                onFailure: function (message) {
+                    console.log("Connection failed: " + message.errorMessage);
+                }
+            });
+        });
+    
+        function onConnect() {
+            console.log("Connected to MQTT broker");
+    
+            // Publish messages to different topics
+            var patientName = document.getElementById('input20').value;
+            var startPos = document.getElementById('input21').value;
+            var stopPos = document.getElementById('input22').value;
+            var countPos = document.getElementById('input23').value;
+    
+            publishMessage('physiobot/patientName1', patientName);
+            publishMessage('physiobot/startPos1', startPos);
+            publishMessage('physiobot/stopPos1', stopPos);
+            publishMessage('physiobot/countPos1', countPos);
+        }
+    
+        function publishMessage(topic, payload) {
+            var message = new Paho.MQTT.Message(payload);
+            message.destinationName = topic;
+            client.send(message);
+        }
+    
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:", responseObject.errorMessage);
+            }
+        }
+    
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:", message.payloadString);
+        }
+    </script>
+    
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+   
+
+</body>
+
+</html>

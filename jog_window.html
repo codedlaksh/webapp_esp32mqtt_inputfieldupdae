@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jog Window</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/mqttws31.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+    <script>
+        // MQTT Broker Configuration
+        var broker = "mqtt://mqtt.example.com";
+        var port = 1883;
+        var clientId = "web-client";
+        var topic = "system/data";
+
+        // MQTT Client Initialization
+        var client = new Paho.MQTT.Client(broker, port, clientId);
+
+        // Connect to MQTT Broker
+        client.connect({ onSuccess: onConnect });
+
+        // MQTT Connection Success Callback
+        function onConnect() {
+            console.log("Connected to MQTT Broker");
+            client.subscribe(topic);
+        }
+
+        // MQTT Message Arrival Callback
+        client.onMessageArrived = function (message) {
+            var data = JSON.parse(message.payloadString);
+            renderData(data);
+        };
+
+        // Render Data
+        function renderData(data) {
+            // Update 3D Object with data
+            // Code to update the 3D object goes here
+
+            // Update values in number
+            document.getElementById("startValue").innerText = data.start;
+            document.getElementById("stopValue").innerText = data.stop;
+            document.getElementById("speedValue").innerText = data.speed;
+        }
+
+        // Publish Start Command
+        function publishStart() {
+            var message = new Paho.MQTT.Message(JSON.stringify({ command: "start" }));
+            message.destinationName = topic;
+            client.send(message);
+        }
+
+        // Publish Stop Command
+        function publishStop() {
+            var message = new Paho.MQTT.Message(JSON.stringify({ command: "stop" }));
+            message.destinationName = topic;
+            client.send(message);
+        }
+
+        // Publish Speed Command
+        function publishSpeed(speed) {
+            var message = new Paho.MQTT.Message(JSON.stringify({ command: "speed", value: speed }));
+            message.destinationName = topic;
+            client.send(message);
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.html">
+            <img src=".\logo\logo-transparent-svg.svg" class="img-circle" alt="Cinque Terre" width="304" height="220">
+        </a>
+       
+        <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0" type="button"
+                data-toggle="collapse" data-target="#navbar12">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar12">
+                <ul class="nav navbar-nav ml-auto ">
+                    <li class="nav-item menu-item"> <a class="nav-link" href="index.html">Home</a> </li>
+                    <li class="nav-item menu-item"><a class="nav-link" href="range_of_motion.html">Range of Motion
+                        Session</a></li>
+                <li class="nav-item menu-item"><a class="nav-link" href="strength_test.html">Strength Test </a>
+                </ul>
+
+            </div>
+    </nav>
+    
+    <button onclick="publishStart()">Start</button>
+    <button onclick="publishStop()">Stop</button>
+    <input type="range" min="0" max="100" step="1" onchange="publishSpeed(this.value)">
+    
+</body>
+</html>
+
+
+    <div id="renderContainer"></div>
+
+    <script>
+        // MQTT Broker Configuration
+        const brokerUrl = "wss://mqtt.example.com"; // Replace with your MQTT broker URL
+        const clientId = "web-client-" + Math.random().toString(16).substr(2, 8);
+        const topic = "jog_window/data";
+
+        // Create MQTT client
+        const client = new Paho.MQTT.Client(brokerUrl, clientId);
+
+        // Set callback handlers
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        // Connect to MQTT broker
+        client.connect({
+            onSuccess: onConnect,
+            useSSL: true
+        });
+
+        // Callback function for successful connection
+        function onConnect() {
+            console.log("Connected to MQTT broker");
+
+            // Subscribe to topic
+            client.subscribe(topic);
+        }
+
+        // Callback function for connection lost
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("Connection lost: " + responseObject.errorMessage);
+            }
+        }
+
+        // Callback function for received message
+        function onMessageArrived(message) {
+            console.log("Received message: " + message.payloadString);
+
+            // Update 3D object based on received data
+            const data = JSON.parse(message.payloadString);
+            // Update the 3D object with the data
+        }
+
+        // Button event handlers
+        const startButton = document.getElementById("startButton");
+        startButton.addEventListener("click", function() {
+            // Publish start command to MQTT broker
+            const message = new Paho.MQTT.Message("start");
+            message.destinationName = topic;
+            client.send(message);
+        });
+
+        const stopButton = document.getElementById("stopButton");
+        stopButton.addEventListener("click", function() {
+            // Publish stop command to MQTT broker
+            const message = new Paho.MQTT.Message("stop");
+            message.destinationName = topic;
+            client.send(message);
+        });
+
+        const speedButton = document.getElementById("speedButton");
+        speedButton.addEventListener("click", function() {
+            // Publish speed command to MQTT broker
+            const message = new Paho.MQTT.Message("speed");
+            message.destinationName = topic;
+            client.send(message);
+        });
+
+        // Render 3D object
+        // Add your code here to render the 3D object based on the received data
+
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

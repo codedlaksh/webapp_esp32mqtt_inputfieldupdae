@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Patient Records</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css" />
+    <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+            <a class="navbar-brand" href="index.html">
+                <img src=".\logo\logo-transparent-svg.svg" class="img-circle" alt="Cinque Terre" width="304"
+                    height="220">
+            </a>
+
+            <div class="container"> <button class="navbar-toggler navbar-toggler-right border-0" type="button"
+                    data-toggle="collapse" data-target="#navbar12">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar12">
+                    <ul class="nav navbar-nav ml-auto ">
+                        <li class="nav-item menu-item"> <a class="nav-link" href="index.html">Home</a> </li>
+                        <!-- <li class="nav-item menu-item"> <a class="nav-link" href="patient_records.html">Patient Records</a> </li> -->
+
+                        <li class="nav-item menu-item"><a class="nav-link" href="doctor_page.html">Prescribe </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <div class="py-5 text-center">
+            <div class="container">
+                <!-- <div class="row">
+                    <div class="mx-auto col-lg-5 col-md-7 col-10"> -->
+                        
+    <!-- Other form elements -->
+
+
+                <div class="row">
+                    <label for="name">Session No:</label>
+                    <input id="input1" type="number" class="form-control" id="form16" placeholder="1">
+                </div>
+                <div class="row">
+                    <label for="name">Date:</label>
+                    <input id="input2" type="date" class="form-control" id="form16" placeholder="09/04/2024">
+                </div>
+                <!-- <div class="row">
+                    <label for="name">Prescribe Stop Pos:</label>
+                    <input type="name" class="form-control" id="form16" placeholder="5°">
+                </div> -->
+                <div class="row">
+                    <label for="name">Start Time</label>
+                    <input id="input3" type="time" class="form-control" id="form16" placeholder="3:00pm">
+                </div>
+                <div class="row">
+                    <label for="name">End Time</label>
+                    <input id="input4" type="time" class="form-control" id="form16" placeholder="4:00pm°">
+                </div>
+                <div class="row">
+                    <label for="name">High Pos</label>
+                    <input id="input5" type="number" class="form-control" id="form16" placeholder="5°">
+                </div>
+                <div class="row">
+                    <label for="name">Extra Up Pos</label>
+                    <input id="input6" type="number" class="form-control" id="form16" placeholder="7°">
+                </div>
+                <div class="row">
+                    <label for="name">Up hold time</label>
+                    <input id="input7" type="number" class="form-control" id="form16" placeholder="1 s">
+                </div>
+                <div class="row">
+                    <label for="name">Low Pos</label>
+                    <input id="input8" type="number" class="form-control" id="form16" placeholder="5°">
+                </div>
+                <div class="row">
+                    <label for="name">Extra Low Pos</label>
+                    <input id="input9" type="number" class="form-control" id="form16" placeholder="7°">
+                </div>
+                <div class="row">
+                    <label for="name">Low hold time</label>
+                    <input id="input10" type="number" class="form-control" id="form16" placeholder="1 s">
+                </div>
+
+                <div class="row">
+                    <label for="name">Speed</label>
+                    <input id="input11" type="number" class="form-control" id="form16" placeholder="7°/s">
+                </div>
+                <div class="row">
+                    <label for="name">Acceleration</label>
+                    <input id="input12" type="number" class="form-control" id="form16" placeholder="1 s">
+                </div>
+                <div class="row">
+                    <label for="name">Deceleration</label>
+                    <input id="input13" type="number" class="form-control" id="form16" placeholder="5 s">
+                </div>
+                <div class="row">
+                    <label for="name">Repitions</label>
+                    <input id="input14" type="number" class="form-control" id="form16" placeholder="5">
+                </div>
+                <!-- <div class="row">
+                    <label for="name">Set Position</label>
+                    <input id="input15" type="number" class="form-control" id="form16" placeholder="5°">
+                </div> -->
+                <div class="row">
+                    <label for="name">Maximum torque</label>
+                    <input id="input16" type="number" class="form-control" id="form16" placeholder="12Nm">
+                </div>
+                <div class="row">
+                    <label for="name">Holding time</label>
+                    <input id="input17" type="number" class="form-control" id="form16" placeholder="1.2 s">
+                </div>
+
+
+
+
+
+
+
+            </div>
+            <button onclick="downloadDataToExcel()" ID="uploadButton"
+                style="background: rgb(197, 228, 228); border-color: transparent;margin-top: 1rem; border-radius: 10px; font-weight: bolder; ">Download<img
+                    src="download.png" style="width: 10%; background: transparent;"></button>
+        </div>
+        
+
+    </main>
+
+    <script type="text/javascript">
+        function onConnect() {
+            console.log("Connected to MQTT broker");
+            // client.subscribe("esp32/sessionnumber");
+            client.subscribe("physiobot/sessionnumber");
+            client.subscribe("physiobot/date");
+            client.subscribe("physiobot/start_time");
+            client.subscribe("physiobot/end_time");
+            client.subscribe("physiobot/high_pos");
+            client.subscribe("physiobot/extra_up_pos");
+            client.subscribe("physiobot/up_hold_time");
+            client.subscribe("physiobot/low_pos");
+            var message = new Paho.MQTT.Message("Hello from Web");
+            message.destinationName = "esp32/subscribe";
+            client.send(message);
+        }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:", responseObject.errorMessage);
+            }
+        }
+
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:", message.payloadString);
+            document.getElementById("input1").value = message.payloadString;
+        }
+
+        var client = new Paho.MQTT.Client(
+            "f72b8337ec8b4c9ea2a1da1effbced2f.s1.eu.hivemq.cloud",
+            Number(8884),
+            "/mqtt", // Path to the MQTT endpoint -- adjust if necessary
+            "Physiobot_webclient"
+        );
+
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        client.connect({
+            onSuccess: onConnect,
+            useSSL: true,
+            userName: "info.lakshmigopi@gmail.com",
+            password: "Laksh@2024",
+            onFailure: function (message) {
+                console.log("Connection failed: " + message.errorMessage);
+            }
+        });
+    </script>
+        <script type="text/javascript">
+
+        function downloadDataToExcel() {
+  // Collect data from input fields
+  var data = [
+    ["Session No", "Date:", "Start Time", "End Time", "High Pos", "Extra Up Pos","Up hold time","Low Pos","Extra Low Pos", "Low hold time","Speed", "Acceleration","Deceleration","Repitions","Maximum torque","Holding time" ], // Header row
+    [
+      document.getElementById("input1").value,
+      document.getElementById("input2").value,
+      document.getElementById("input3").value,
+      document.getElementById("input4").value,
+      document.getElementById("input5").value,
+      document.getElementById("input6").value,
+      document.getElementById("input7").value,
+      document.getElementById("input8").value,
+      document.getElementById("input9").value,
+      document.getElementById("input10").value,
+      document.getElementById("input11").value,
+      document.getElementById("input12").value,
+      document.getElementById("input13").value,
+      document.getElementById("input14").value,
+      document.getElementById("input16").value,
+      document.getElementById("input17").value,
+    ] // Data row
+  ];
+
+  // Create a workbook and a worksheet
+  var ws = XLSX.utils.aoa_to_sheet(data);
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Data");
+
+  // Download the workbook
+  XLSX.writeFile(wb, "InputData.xlsx");
+
+}
+    </script>
+</body>
+
+
+
+
+
+</html>
